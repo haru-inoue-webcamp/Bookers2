@@ -1,0 +1,86 @@
+<div class="container">
+  <div class="row">
+    <div class="col-xs-3">
+      <h2>User info</h2>
+      <%= attachment_image_tag @user, :profile_image, :fill, 100, 100, format: 'jpeg', fallback: "no_image.jpg" , size:'100x100' %>
+      <table class="table">
+        <tr>
+          <th>name</th>
+          <th><%= @user.name %></th>
+        </tr>
+        <tr>
+          <th>introduction</th>
+          <th><%= @user.introduction %></th>
+        </tr>
+      </table>
+      <div class="row">
+        <% if @user.id == current_user.id %>
+        <%= link_to '', edit_user_path(@user.id),  class: "col-xs-12 btn btn-default glyphicon glyphicon-wrench" %>
+        <% else %>
+        <%= link_to '', user_path(current_user.id),  class: "col-xs-12 btn btn-default glyphicon glyphicon-wrench" %>
+        <% end %>
+      </div>
+      <div class="row">
+        <h2>New book</h2>
+        <%= form_for(@new_book) do |f| %>
+
+        <% if @new_book.errors.any? %>
+        <%= @new_book.errors.count %>件のエラーが発生しました
+        <% @new_book.errors.full_messages.each do |message| %>
+        <%= message %>
+        <% end %>
+        <% end %>
+
+        <div class="row field">
+          <label class="label">Title</label>
+          <%= f.text_field :title, class: "col-xs-12" %>
+        </div>
+        <div class="row field">
+          <label class="label">Opinion</label>
+          <%= f.text_area :body, class: "col-xs-12" %>
+        </div>
+        <div class="row actions">
+          <%= f.submit "Create Book", class: "btn btn-primary col-xs-12"%>
+        </div>
+        <% end %>
+      </div>
+
+    </div>
+    <div class="col-xs-9">
+      <h2>Book detail</h2>
+      <table class="table table-hover">
+      <% if @user.id == current_user.id %>
+        <tbody>
+          <tr>
+            <th>
+            <%= link_to user_path(@user.id) do %>
+              <%= attachment_image_tag @user, :profile_image, fallback: "no_image.jpg", size:'100x100' %>
+              <br>
+              <%= @user.name %>
+              <% end %>
+            </th>
+            <th><%= @book.title %></th>
+            <th><%= @book.body %></th>
+            <th><%= link_to 'Edit', edit_book_path(@book.id), class: "btn btn-success btn-xs" %></th>
+            <th><%= link_to 'Destroy', book_path(@book.id), method: :delete , class: "btn btn-danger btn-xs", data: { confirm: '本当に消しますか？' } %></th>
+          </tr>
+        </tbody>
+        <% else %>
+        <tbody>
+          <tr>
+            <th>
+            <%= link_to user_path(@user.id) do %>
+              <%= attachment_image_tag @user, :profile_image, :fill, 100, 100, fallback: "no_image.jpg" , size:'40x40' %>
+              <br>
+              <%= @user.name %>
+              <% end %>
+            </th>
+            <th><%= @book.title %></th>
+            <th><%= @book.body %></th>
+          </tr>
+        </tbody>
+        <% end %>
+      </table>
+    </div>
+  </div>
+</div>
